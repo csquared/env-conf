@@ -2,5 +2,5 @@
 Object.send(:remove_const, :Config) if defined?(Config)
 
 module Config
-  VERSION = '0.0.1'
+  VERSION = '0.0.2'
 end
