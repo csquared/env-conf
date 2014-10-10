@@ -1,6 +1,29 @@
-# Env::Conf
+# env-conf
+## a better `Config`
 
-TODO: Write a gem description
+Provides a better way to configure the application than simply pulling
+strings from `ENV`.
+
+#### defaults
+
+```ruby
+Config[:foo]
+# => nil
+
+Config.default(:foo, 'bar')
+Config[:foo]
+# => 'bar'
+Config['FOO']
+# => 'bar'
+```
+
+#### type casts
+
+Returns `nil` when undefined, otherwise casts to indicated type.
+
+```ruby
+Config.int(:max_connections)
+```
 
 ## Installation
 
@@ -20,7 +43,11 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+require 'env-conf'
+
+Config[:foo]
+```
 
 ## Contributing
 
