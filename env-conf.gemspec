@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'env/conf/version'
+require 'env-conf/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "env-conf"
-  spec.version       = Env::Conf::VERSION
+  spec.version       = Config::VERSION
   spec.authors       = ["Chris Continanza"]
   spec.email         = ["christopher.continanza@gmail.com"]
   spec.summary       = %q{Use ENV vars for Configuration}
