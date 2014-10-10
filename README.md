@@ -1,10 +1,11 @@
 # env-conf
-## a better `Config`
 
 Provides a better way to configure the application than simply pulling
-strings from `ENV`.
+strings from `ENV` by overriding the deprecated `Config` class.
 
-#### defaults
+## Features
+
+### defaults
 
 ```ruby
 Config[:foo]
@@ -17,13 +18,17 @@ Config['FOO']
 # => 'bar'
 ```
 
-#### type casts
+### type casts
 
 Returns `nil` when undefined, otherwise casts to indicated type.
 
+#### int
 ```ruby
 Config.int(:max_connections)
+#=> 10
 ```
+
+
 
 ## Installation
 

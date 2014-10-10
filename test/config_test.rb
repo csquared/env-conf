@@ -9,20 +9,19 @@ require 'env-conf'
 module EnvironmentHelpers
   # Override an environment variable in the current test.
   def set_env(key, value)
-    overrides[key] = ENV[key] unless overrides.has_key?(key)
+    @overrides[key] = ENV[key] unless @overrides.has_key?(key)
     ENV[key] = value
+  end
+
+  def setup
+    super
+    @overrides = {}
   end
 
   # Restore the environment back to its state before tests ran.
   def teardown
-    overrides.each { |key, value| ENV[key] = value }
+    @overrides.each { |key, value| ENV[key] = value }
     super
-  end
-
-  private
-  # The overridden environment variables to restore when the test finishes.
-  def overrides
-    @overrides ||= {}
   end
 end
 
@@ -81,6 +80,14 @@ class ConfigTest < Minitest::Test
     refute Config.production?
     set_env 'RACK_ENV', 'production'
     assert Config.production?
+  end
+
+  # Config.development? is true when RACK_ENV=production.
+  def test_development_mode
+    set_env 'RACK_ENV', nil
+    refute Config.development?
+    set_env 'RACK_ENV', 'development'
+    assert Config.development?
   end
 
   # Config.test? is true when RACK_ENV=test.
@@ -212,5 +219,18 @@ class ConfigTest < Minitest::Test
 
     Config.default(:foo, false)
     assert_equal(false, Config.bool?(:foo))
+  end
+  
+  def test_app_env
+    set_env 'RACK_ENV', nil
+    assert_raises RuntimeError do
+      Config.app_env
+    end
+    set_env 'RACK_ENV', 'test'
+    assert_equal(:test, Config.app_env)
+    set_env 'RACK_ENV', 'development'
+    assert_equal(:development, Config.app_env)
+    set_env 'RACK_ENV', 'production'
+    assert_equal(:production, Config.app_env)
   end
 end

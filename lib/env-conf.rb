@@ -87,6 +87,11 @@ module Config
     self['RACK_ENV'] == 'test'
   end
 
+  # @return [Bool] True if the service is in development mode.
+  def self.development?
+    self['RACK_ENV'] == 'development'
+  end
+
   # The `APP_NAME` env var is used to identify which codebase is
   # running in librato.  This usually matches the name of the repository.
   #
@@ -102,6 +107,13 @@ module Config
   # @return [String] The deploy/environment of the app
   def self.app_deploy
     env("APP_DEPLOY")
+  end
+
+  # The `RACK_ENV` env var is used to identify the app mode
+  #
+  # @return [Symbol] The environment of the app
+  def self.app_env
+    env!("RACK_ENV").to_sym
   end
 
   # The port to listen on for web requests.
