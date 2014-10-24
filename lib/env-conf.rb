@@ -143,7 +143,7 @@ module Config
   # @return [Fixnum] The number or nil if the value couldn't be coerced to a
   #   Fixnum.
   def self.int(name)
-    self[name] && self[name].to_i
+    self[name] && (Integer(self[name]) rescue nil)
   end
 
   # Comma-separated words converted to an array.
