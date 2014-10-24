@@ -186,7 +186,7 @@ module Config
   def self.dotenv!
     return if Config.production?
     require 'dotenv'
-    ['.env','.env.local',".env.#{Config[:rack_env]}"].each do |filename|
+    ['.env','.env.local',".env.#{Config[:rack_env]}",".env.#{Config[:rack_env]}.local"].each do |filename|
       if File.exists?(filename)
         @@dotenv.update(Dotenv::Parser.call(File.read(filename)))
       end
