@@ -2,6 +2,7 @@ require_relative './env-conf/version'
 
 module Config
   @@defaults = {}
+  @@dotenv   = {}
 
   # Get a Config value
   #
@@ -28,12 +29,13 @@ module Config
   def self.[](name)
     var_name = name.to_s.upcase
     default_name = name.to_s.downcase.to_sym
-    ENV[var_name] || @@defaults[default_name]
+    ENV[var_name] || @@dotenv[var_name] || @@defaults[default_name]
   end
 
   # Reset defaults values
   def self.reset!
     @@defaults = {}
+    @@dotenv   = {}
   end
 
   # An environment variable.
@@ -177,5 +179,16 @@ module Config
   # @return [URI] URI if the value is parseable, otherwise false.
   def self.uri(name)
     self[name] && URI.parse(self[name])
+  end
+
+  # Loads a ".env" file, using Dotenv to parse but not fuck up the ENV
+  def self.dotenv!
+    return if Config.production? 
+    require 'dotenv'
+    ['.env','.env.local',".env.#{Config[:rack_env]}"].each do |filename|
+      if File.exists?(filename)
+        @@dotenv.update(Dotenv::Parser.call(File.read(filename)))
+      end
+    end
   end
 end
