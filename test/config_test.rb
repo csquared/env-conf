@@ -119,6 +119,12 @@ class ConfigTest < Test
     set_env 'FOO', "3000"
     assert_equal(3000, Config.int('FOO'))
     assert_equal(3000, Config.int(:foo))
+    set_env 'FOO', "1.0"
+    assert_equal(nil, Config.int(:foo))
+    set_env 'FOO', nil
+    assert_equal(nil, Config.int(:foo))
+    set_env 'FOO', "a"
+    assert_equal(nil, Config.int(:foo))
   end
 
   # Config.time returns nil or VAR as time
@@ -135,6 +141,12 @@ class ConfigTest < Test
 
     set_env 'T', '2000-2-2T11:11'
     assert_equal(Time.new(2000,2,2,11,11), Config.time(:t))
+
+    set_env 'T', nil
+    assert_equal(nil, Config.time(:t))
+
+    set_env 'T', 'derp'
+    assert_equal(false, Config.time(:t))
   end
 
   # Config.time returns nil or VAR as URI
