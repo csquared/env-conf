@@ -1,5 +1,6 @@
 require_relative './env-conf/version'
 require 'uri'
+require 'time'
 
 module Config
   @@defaults = {}
@@ -171,7 +172,7 @@ module Config
   #   boolean for.
   # @return [Time] Time if the value is parseable, otherwise false.
   def self.time(name)
-    self[name] && Time.parse(self[name])
+    self[name] && (Time.parse(self[name]) rescue false)
   end
 
   # An environment variable converted to a URI.
