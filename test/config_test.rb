@@ -120,11 +120,11 @@ class ConfigTest < Test
     assert_equal(3000, Config.int('FOO'))
     assert_equal(3000, Config.int(:foo))
     set_env 'FOO', "1.0"
-    assert_equal(nil, Config.int(:foo))
+    assert_raises(ArgumentError){ Config.time(:foo) }
     set_env 'FOO', nil
     assert_equal(nil, Config.int(:foo))
     set_env 'FOO', "a"
-    assert_equal(nil, Config.int(:foo))
+    assert_raises(ArgumentError){ Config.time(:foo) }
   end
 
   # Config.time returns nil or VAR as time
@@ -146,7 +146,7 @@ class ConfigTest < Test
     assert_equal(nil, Config.time(:t))
 
     set_env 'T', 'derp'
-    assert_equal(false, Config.time(:t))
+    assert_raises(ArgumentError){ Config.time(:t) }
   end
 
   # Config.time returns nil or VAR as URI

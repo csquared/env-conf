@@ -144,7 +144,7 @@ module Config
   # @return [Fixnum] The number or nil if the value couldn't be coerced to a
   #   Fixnum.
   def self.int(name)
-    self[name] && (Integer(self[name]) rescue nil)
+    self[name] && Integer(self[name])
   end
 
   # Comma-separated words converted to an array.
@@ -172,7 +172,7 @@ module Config
   #   boolean for.
   # @return [Time] Time if the value is parseable, otherwise false.
   def self.time(name)
-    self[name] && (Time.parse(self[name]) rescue false)
+    self[name] && Time.parse(self[name])
   end
 
   # An environment variable converted to a URI.
