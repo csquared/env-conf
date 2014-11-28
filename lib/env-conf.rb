@@ -1,5 +1,6 @@
 require_relative './env-conf/version'
 require 'uri'
+require 'time'
 
 module Config
   @@defaults = {}
@@ -143,7 +144,7 @@ module Config
   # @return [Fixnum] The number or nil if the value couldn't be coerced to a
   #   Fixnum.
   def self.int(name)
-    self[name] && self[name].to_i
+    self[name] && Integer(self[name])
   end
 
   # Comma-separated words converted to an array.
@@ -186,7 +187,7 @@ module Config
   def self.dotenv!
     return if Config.production?
     require 'dotenv'
-    ['.env','.env.local',".env.#{Config[:rack_env]}"].each do |filename|
+    ['.env','.env.local',".env.#{Config[:rack_env]}",".env.#{Config[:rack_env]}.local"].each do |filename|
       if File.exists?(filename)
         @@dotenv.update(Dotenv::Parser.call(File.read(filename)))
       end

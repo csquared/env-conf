@@ -8,7 +8,7 @@ class DotenvTest < Test
 
   def teardown
     super
-    %w{.env .env.local .env.test}.each do |f|
+    %w{.env .env.local .env.test .env.test.local}.each do |f|
       File.unlink(f) if File.exists?(f)
     end
     FakeFS.deactivate!
@@ -32,7 +32,8 @@ class DotenvTest < Test
   def test_env_specific
     File.open(".env",'w') { |f| f << "FOO=bar" }
     File.open(".env.local",'w') { |f| f << "FOO=zzz" }
-    File.open(".env.test",'w') { |f| f << "FOO=test" }
+    File.open(".env.test",'w') { |f| f << "FOO=foo" }
+    File.open(".env.test.local",'w') { |f| f << "FOO=test" }
     assert_equal(nil, Config[:foo])
     set_env('RACK_ENV', 'test')
     Config.dotenv!
